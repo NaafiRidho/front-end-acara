@@ -28,7 +28,6 @@ export default function App({ Component, pageProps:{session, ...pageProps} }: Ap
           <main
             className={cn(
               inter.className,
-              "lg:py flex min-h-screen min-w-full flex-col items-center justify-center gap-10 py-10",
             )}
           >
             <Component {...pageProps} />

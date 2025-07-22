@@ -23,7 +23,7 @@ const DashboardLayoutSidebar = (props: PropsTypes) => {
     <div
       className={cn(
         "fixed z-50 flex h-screen w-full max-w-[300px] -translate-x-full flex-col justify-between border-r-1 border-default-200 bg-white px-4 py-6 transition-all lg:relative lg:translate-x-0",
-        {"translate-x-0" : isOpen}
+        { "translate-x-0": isOpen },
       )}
     >
       <div>
@@ -46,7 +46,7 @@ const DashboardLayoutSidebar = (props: PropsTypes) => {
             <ListboxItem
               key={item.key}
               className={cn("my-1 h-12 text-2xl", {
-                "bg-danger-500 text-white": item.href === router.pathname,
+                "bg-danger-500 text-white": router.pathname.startsWith(item.href),
               })}
               startContent={item.icon}
               textValue={item.label}

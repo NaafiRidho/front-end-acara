@@ -40,7 +40,7 @@ const Activation = (props: PropTypes) => {
           className="mt-4 w-fit"
           variant="bordered"
           color="danger"
-          onClick={() => {
+          onPress={() => {
             router.push("/");
           }}
         >

@@ -83,10 +83,11 @@ const DataTable = (props: PropsTypes) => {
         <Select
           className="hidden max-w-36 lg:block"
           size="md"
-          selectedKeys={limit}
+          selectedKeys={new Set([limit])}
           selectionMode="single"
           onChange={onChangeLimit}
           startContent={<p className="text-small">Show:</p>}
+          disallowEmptySelection
         >
           {LIMIT_LISTS.map((item) => (
             <SelectItem key={item.value} value={item.value}>
@@ -94,14 +95,17 @@ const DataTable = (props: PropsTypes) => {
             </SelectItem>
           ))}
         </Select>
-        <Pagination
-          isCompact
-          showControls
-          color="danger"
-          page={currentPage}
-          total={totalPages}
-          onChange={onChangePage}
-        />
+        {totalPages > 1 && (
+          <Pagination
+            isCompact
+            showControls
+            color="danger"
+            page={currentPage}
+            total={totalPages}
+            onChange={onChangePage}
+            loop
+          />
+        )}
       </div>
     );
   }, [limit, currentPage, totalPages, onChangeLimit, onChangePage]);

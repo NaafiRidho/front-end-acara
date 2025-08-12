@@ -5,6 +5,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  useDisclosure,
 } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -14,6 +15,7 @@ import { COLUMN_LIST_CATEGORY } from "./Category.constants";
 import { LIMIT_LISTS } from "@/constants/list.constants";
 import useCategory from "./useCategory";
 import InputFile from "@/components/ui/inputFile/inputFile";
+import AddCategoryModal from "./AddCategoryModal/addCategoryModal";
 
 const Category = () => {
   const { push, isReady, query } = useRouter();
@@ -24,11 +26,14 @@ const Category = () => {
     currentPage,
     currentLimit,
     isRefetchingCategory,
+    refetchCategory,
     handleChangeLimit,
     handleChangePage,
     handleSearch,
     handleClearSearch,
   } = useCategory();
+
+  const addCategoryModal = useDisclosure();
 
   useEffect(() => {
     if (isReady) {
@@ -84,7 +89,7 @@ const Category = () => {
           onChangeSearch={handleSearch}
           onClearSearch={handleClearSearch}
           buttonTopContentLabel="Create Category"
-          onclickButtonTopContent={() => {}}
+          onclickButtonTopContent={addCategoryModal.onOpen}
           limit={String(currentLimit)}
           onChangeLimit={handleChangeLimit}
           currentPage={Number(currentPage)}
@@ -93,7 +98,7 @@ const Category = () => {
           isLoading={isLoadingCategory || isRefetchingCategory}
         />
       )}
-      <InputFile name="input"/>
+      <AddCategoryModal refecthCategory={refetchCategory} {...addCategoryModal} />
     </section>
   );
 };

@@ -16,6 +16,7 @@ import { LIMIT_LISTS } from "@/constants/list.constants";
 import useCategory from "./useCategory";
 import InputFile from "@/components/ui/inputFile/inputFile";
 import AddCategoryModal from "./AddCategoryModal/addCategoryModal";
+import DeleteCategoryModal from "./DeleteCategoryModal/DeleteCategoryModal";
 
 const Category = () => {
   const { push, isReady, query } = useRouter();
@@ -31,9 +32,12 @@ const Category = () => {
     handleChangePage,
     handleSearch,
     handleClearSearch,
+    selectedId,
+    setSelectedId,
   } = useCategory();
 
   const addCategoryModal = useDisclosure();
+  const deleteCategoryModal = useDisclosure();
 
   useEffect(() => {
     if (isReady) {
@@ -46,10 +50,10 @@ const Category = () => {
       const cellValue = category[columnKey as keyof typeof category];
 
       switch (columnKey) {
-        // case "icon":
-        //   return (
-        //     <Image src={`${cellValue}`} alt="icon" width={100} height={200} />
-        //   );
+        case "icon":
+          return (
+            <Image src={`${cellValue}`} alt="icon" width={100} height={200} />
+          );
         case "action":
           return (
             <Dropdown>
@@ -65,7 +69,14 @@ const Category = () => {
                 >
                   Detail Category
                 </DropdownItem>
-                <DropdownItem key="delete-category" className="text-danger-500">
+                <DropdownItem
+                  key="delete-category"
+                  className="text-danger-500"
+                  onPress={() => {
+                    setSelectedId(`${category._id}`);
+                    deleteCategoryModal.onOpen();
+                  }}
+                >
                   Delete Category
                 </DropdownItem>
               </DropdownMenu>
@@ -98,7 +109,16 @@ const Category = () => {
           isLoading={isLoadingCategory || isRefetchingCategory}
         />
       )}
-      <AddCategoryModal refecthCategory={refetchCategory} {...addCategoryModal} />
+      <AddCategoryModal
+        refecthCategory={refetchCategory}
+        {...addCategoryModal}
+      />
+      <DeleteCategoryModal
+        selectedId={selectedId}
+        setSelectedId={setSelectedId}
+        refecthCategory={refetchCategory}
+        {...deleteCategoryModal}
+      />
     </section>
   );
 };

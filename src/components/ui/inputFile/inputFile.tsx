@@ -1,27 +1,34 @@
 import { cn } from "@/utils/cn";
-import { label, p } from "framer-motion/client";
+import { Button, Spinner } from "@nextui-org/react";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useId, useRef, useState } from "react";
-import { CiSaveUp2 } from "react-icons/ci";
+import { CiSaveUp2, CiTrash } from "react-icons/ci";
 
 interface PropsTypes {
   name: string;
   isDropable?: boolean;
   className?: string;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onUpload?: (files: FileList) => void;
+  onDelete?: () => void;
+  isUploading?: boolean;
+  isDeleting?: boolean;
   isInvalid?: boolean;
+  preview?: string;
   errorMessage?: string;
 }
 
 const InputFile = (props: PropsTypes) => {
-  const [uploadedImage, setUplodedImage] = useState<File | null>(null);
   const {
     name,
     className,
     isDropable = false,
-    onChange,
     isInvalid,
     errorMessage,
+    onUpload,
+    onDelete,
+    isDeleting,
+    isUploading,
+    preview,
   } = props;
   const drop = useRef<HTMLLabelElement>(null);
   const dropzoneId = useId();
@@ -33,7 +40,10 @@ const InputFile = (props: PropsTypes) => {
   };
   const handleDrog = (e: DragEvent) => {
     e.preventDefault();
-    setUplodedImage(e.dataTransfer?.files?.[0] || null);
+    const files = e.dataTransfer?.files;
+    if (files && onUpload) {
+      onUpload(files);
+    }
   };
   useEffect(() => {
     const dropCurrent = drop.current;
@@ -47,13 +57,10 @@ const InputFile = (props: PropsTypes) => {
       };
     }
   }, []);
-  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleOnUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;
-    if (files && files.length > 0) {
-      setUplodedImage(files[0]);
-      if (onChange) {
-        onChange(e);
-      }
+    if (files && onUpload) {
+      onUpload(files);
     }
   };
   return (
@@ -67,21 +74,27 @@ const InputFile = (props: PropsTypes) => {
           { "border-danger-500": isInvalid },
         )}
       >
-        {uploadedImage ? (
-          <div className="flex flex-col items-center justify-center p-5">
+        {" "}
+        {preview && (
+          <div className="relative flex flex-col items-center justify-center p-5">
             <div className="mb-2 w-1/2">
-              <Image
-                fill
-                src={URL.createObjectURL(uploadedImage)}
-                alt="image"
-                className="!relative"
-              />
+              <Image fill src={preview} alt="image" className="!relative" />
             </div>
-            <p className="text-center text-sm font-semibold text-gray-500">
-              {uploadedImage.name}
-            </p>
+            <Button
+              isIconOnly
+              onPress={onDelete}
+              disabled={isDeleting}
+              className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded bg-danger-100"
+            >
+              {isDeleting ? (
+                <Spinner size="sm" color="danger" />
+              ) : (
+                <CiTrash className="h-5 w-5 text-danger-500" />
+              )}
+            </Button>
           </div>
-        ) : (
+        )}
+        {!preview && !isUploading && (
           <div className="flex flex-col items-center justify-center p-5">
             <CiSaveUp2 className="mb-2 h-10 w-10 text-gray-400" />
             <p className="text-center text-sm font-semibold text-gray-500">
@@ -91,16 +104,26 @@ const InputFile = (props: PropsTypes) => {
             </p>
           </div>
         )}
+        {isUploading && (
+          <div className="flex flex-col items-center justify-center p-5">
+            <Spinner color="danger" />
+          </div>
+        )}
         <input
           name={name}
           type="file"
           className="hidden"
           accept="image/*"
           id={`dropzone-file-${dropzoneId}`}
-          onChange={handleOnChange}
+          onChange={handleOnUpload}
+          disabled={preview !== ""}
+          onClick={(e) => {
+            e.currentTarget.value = "";
+            e.target.dispatchEvent(new Event("change", { bubbles: true }));
+          }}
         />
       </label>
-      {isInvalid &&(
+      {isInvalid && (
         <p className="p-1 text-xs text-danger-500">{errorMessage}</p>
       )}
     </div>

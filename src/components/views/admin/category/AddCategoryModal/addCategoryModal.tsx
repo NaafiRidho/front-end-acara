@@ -11,7 +11,6 @@ import {
 } from "@nextui-org/react";
 import useAddCategoryModal from "./useAddCategoryModal";
 import { Controller } from "react-hook-form";
-import { error } from "console";
 import InputFile from "@/components/ui/inputFile/inputFile";
 import { useEffect } from "react";
 
@@ -27,12 +26,16 @@ const AddCategoryModal = (props: PropTypes) => {
   const {
     control,
     errors,
-    reset,
     handleSubmitForm,
     handleAddCategory,
     isPendingMutateAddCategory,
     isSuccessMutateAddCategory,
-    isPendingMutateAddFile,
+    handleUploadIcon,
+    isPendingMutateUploadFile,
+    preview,
+    handleDeleteIcon,
+    isPendingMutateDeleteFile,
+    handleOnClose,
   } = useAddCategoryModal();
 
   useEffect(() => {
@@ -42,8 +45,16 @@ const AddCategoryModal = (props: PropTypes) => {
     }
   }, [isSuccessMutateAddCategory]);
 
+  const disabledSubmit = isPendingMutateAddCategory || isPendingMutateUploadFile || isPendingMutateDeleteFile
+
   return (
-    <Modal onOpenChange={onOpenChange} isOpen={isOpen} placement="center" scrollBehavior="inside">
+    <Modal
+      onOpenChange={onOpenChange}
+      isOpen={isOpen}
+      placement="center"
+      scrollBehavior="inside"
+      onClose={()=>handleOnClose(onClose)}
+    >
       <form onSubmit={handleSubmitForm(handleAddCategory)}>
         <ModalContent className="m-4">
           <ModalHeader>Add Category</ModalHeader>
@@ -62,6 +73,7 @@ const AddCategoryModal = (props: PropTypes) => {
                     type="text"
                     isInvalid={errors.name !== undefined}
                     errorMessage={errors.name?.message}
+                    isDisabled
                   ></Input>
                 )}
               ></Controller>
@@ -85,11 +97,14 @@ const AddCategoryModal = (props: PropTypes) => {
                 render={({ field: { onChange, value, ...field } }) => (
                   <InputFile
                     {...field}
-                    onChange={(e) => {
-                      onChange(e.currentTarget.files);
-                    }}
+                    onUpload={(files) => handleUploadIcon(files, onChange)}
+                    isUploading={isPendingMutateUploadFile}
                     isInvalid={errors.icon !== undefined}
                     errorMessage={errors.icon?.message}
+                    isDropable
+                    preview={typeof preview === 'string' ? preview : ""}
+                    isDeleting={isPendingMutateDeleteFile}
+                    onDelete={()=>handleDeleteIcon(onChange)}
                   />
                 )}
               ></Controller>
@@ -99,17 +114,17 @@ const AddCategoryModal = (props: PropTypes) => {
             <Button
               color="danger"
               variant="flat"
-              onPress={onClose}
-              disabled={isPendingMutateAddCategory || isPendingMutateAddFile}
+              onPress={()=>handleOnClose(onClose)}
+              disabled={disabledSubmit}
             >
               Cancel
             </Button>
             <Button
               color="danger"
               type="submit"
-              disabled={isPendingMutateAddCategory || isPendingMutateAddFile}
+              disabled={disabledSubmit}
             >
-              {isPendingMutateAddCategory || isPendingMutateAddFile ? (
+              {isPendingMutateAddCategory ? (
                 <Spinner size="sm" color="white"></Spinner>
               ) : (
                 "Create Category"

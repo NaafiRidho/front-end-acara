@@ -73,7 +73,6 @@ const AddCategoryModal = (props: PropTypes) => {
                     type="text"
                     isInvalid={errors.name !== undefined}
                     errorMessage={errors.name?.message}
-                    isDisabled
                   ></Input>
                 )}
               ></Controller>

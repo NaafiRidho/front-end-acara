@@ -1,4 +1,5 @@
 import { LIMIT_LISTS } from "@/constants/list.constants";
+import useChangeUrl from "@/hooks/useChangeUrl";
 import { cn } from "@/utils/cn";
 import {
   Button,
@@ -21,14 +22,8 @@ interface PropsTypes {
   columns: Record<string, unknown>[];
   data: Record<string, unknown>[];
   renderCell: (item: Record<string, unknown>, columnKey: Key) => ReactNode;
-  onClearSearch: () => void;
-  onChangeSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   buttonTopContentLabel?: string;
   onclickButtonTopContent?: () => void;
-  currentPage: number;
-  limit: string;
-  onChangeLimit: (e: ChangeEvent<HTMLSelectElement>) => void;
-  onChangePage: (page: number) => void;
   totalPages: number;
   emptyContent: string;
   isLoading?: boolean;
@@ -36,18 +31,21 @@ interface PropsTypes {
 
 const DataTable = (props: PropsTypes) => {
   const {
+    currentLimit,
+    currentPage,
+    handleChangeLimit,
+    handleChangePage,
+    handleSearch,
+    handleClearSearch,
+  } = useChangeUrl();
+  
+  const {
     columns,
     data,
     renderCell,
-    onClearSearch,
-    onChangeSearch,
     buttonTopContentLabel,
     onclickButtonTopContent,
-    limit,
-    onChangeLimit,
     totalPages,
-    onChangePage,
-    currentPage,
     emptyContent,
     isLoading,
   } = props;
@@ -60,8 +58,8 @@ const DataTable = (props: PropsTypes) => {
           className="w-full sm:max-w-[24%]"
           placeholder="search by name"
           startContent={<CiSearch />}
-          onClear={onClearSearch}
-          onChange={onChangeSearch}
+          onClear={handleClearSearch}
+          onChange={handleSearch}
         />
         {buttonTopContentLabel && (
           <Button color="danger" onPress={onclickButtonTopContent}>
@@ -72,8 +70,8 @@ const DataTable = (props: PropsTypes) => {
     );
   }, [
     buttonTopContentLabel,
-    onChangeSearch,
-    onClearSearch,
+    handleSearch,
+    handleClearSearch,
     onclickButtonTopContent,
   ]);
 
@@ -83,9 +81,9 @@ const DataTable = (props: PropsTypes) => {
         <Select
           className="hidden max-w-36 lg:block"
           size="md"
-          selectedKeys={new Set([limit])}
+          selectedKeys={new Set([`${currentLimit}`])}
           selectionMode="single"
-          onChange={onChangeLimit}
+          onChange={handleChangeLimit}
           startContent={<p className="text-small">Show:</p>}
           disallowEmptySelection
         >
@@ -100,15 +98,15 @@ const DataTable = (props: PropsTypes) => {
             isCompact
             showControls
             color="danger"
-            page={currentPage}
+            page={Number(currentPage)}
             total={totalPages}
-            onChange={onChangePage}
+            onChange={handleChangePage}
             loop
           />
         )}
       </div>
     );
-  }, [limit, currentPage, totalPages, onChangeLimit, onChangePage]);
+  }, [currentLimit, currentPage, totalPages, handleChangeLimit, handleChangePage]);
 
   return (
     <Table

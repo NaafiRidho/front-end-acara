@@ -4,8 +4,6 @@ import categoryServices from "@/services/category.service";
 import { ICategory } from "@/types/Category";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
-import { error } from "console";
-import { data } from "framer-motion/client";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -21,10 +19,11 @@ const schema = yup.object().shape({
 const useAddCategoryModal = () => {
   const { setToaster } = useContext(ToasterContext);
   const {
-    mutateUploadFile,
     isPendingMutateUploadFile,
-    mutateDeleteFile,
     isPendingMutateDeleteFile,
+
+    handleUploadFile,
+    handleDeleteFile,
   } = useMediaHandling();
 
   const {
@@ -39,44 +38,32 @@ const useAddCategoryModal = () => {
     resolver: yupResolver(schema),
   });
 
-  const preview = watch('icon');
+  const preview = watch("icon");
+  const fileUrl = getValues("icon");
 
   const handleUploadIcon = (
     files: FileList,
     onChange: (files: FileList | "undefined") => void,
   ) => {
-    if (files.length !== 0) {
-      onChange(files);
-      mutateUploadFile({
-        file: files[0],
-        callback: (fileUrl: string) => {
-          setValue("icon", fileUrl);
-        },
-      });
-    }
+    handleUploadFile(files, onChange, (fileUrl: string | undefined) => {
+      if (fileUrl) {
+        setValue("icon", fileUrl);
+      }
+    });
   };
 
   const handleDeleteIcon = (
-    onChange: (files: FileList | undefined)=>void,
-  )=>{
-    const fileUrl = getValues("icon");
-    if (typeof fileUrl === "string") {
-      mutateDeleteFile({fileUrl, callback: ()=> onChange(undefined)})
-    }
-  }
+    onChange: (files: FileList | undefined) => void,
+  ) => {
+    handleDeleteFile(fileUrl, () => onChange(undefined));
+  };
 
-  const handleOnClose = (onclose: ()=>void)=>{
-    const fileUrl = getValues("icon");
-    if (typeof fileUrl === "string") {
-      mutateDeleteFile({fileUrl, callback: ()=> {
-        onclose();
-        reset();
-      }})
-    }else{
+  const handleOnClose = (onclose: () => void) => {
+    handleDeleteFile(fileUrl, () => {
       onclose();
       reset();
-    }
-  }
+    });
+  };
 
   const addCategory = async (payload: ICategory) => {
     const res = await categoryServices.addCategory(payload);
@@ -119,7 +106,7 @@ const useAddCategoryModal = () => {
     preview,
     handleDeleteIcon,
     isPendingMutateDeleteFile,
-    handleOnClose
+    handleOnClose,
   };
 };
 

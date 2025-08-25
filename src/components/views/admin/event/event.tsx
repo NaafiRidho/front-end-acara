@@ -1,25 +1,15 @@
 import DataTable from "@/components/ui/DataTable/DataTable";
-import {
-  Button,
-  Chip,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  useDisclosure,
-} from "@nextui-org/react";
+import { Chip, useDisclosure } from "@nextui-org/react";
 import Image from "next/image";
 import { Router, useRouter } from "next/router";
 import { Key, ReactNode, useCallback, useEffect } from "react";
-import { CiMenuKebab } from "react-icons/ci";
 import { COLUMN_LIST_EVENT } from "./event.constants";
-import { LIMIT_LISTS } from "@/constants/list.constants";
 import useEvent from "./useEvent";
-import InputFile from "@/components/ui/inputFile/inputFile";
 import useChangeUrl from "@/hooks/useChangeUrl";
 import DropdownAction from "@/components/commons/DropDownAction/DropdownAction";
+import AddEventModal from "./AddEventModal/addEventModal";
 
-const Category = () => {
+const Event = () => {
   const { push, isReady, query } = useRouter();
   const {
     dataEvents,
@@ -58,7 +48,11 @@ const Category = () => {
           );
         case "isPublish":
           return (
-            <Chip color={cellValue ? "success" : "warning"} size="sm" variant="flat">
+            <Chip
+              color={cellValue ? "success" : "warning"}
+              size="sm"
+              variant="flat"
+            >
               {cellValue === true ? "Published" : "Not Published"}
             </Chip>
           );
@@ -93,7 +87,11 @@ const Category = () => {
           isLoading={isLoadingEvents || isRefetchingEvents}
         />
       )}
+      <AddEventModal
+        refecthEvent={refetchEvents}
+        {...addEventModal}
+      />
     </section>
   );
 };
-export default Category;
+export default Event;

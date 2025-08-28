@@ -138,7 +138,8 @@ const AddEventModal = (props: PropTypes) => {
                       hideTimeZone
                       showMonthAndYearPickers
                       variant="bordered"
-                      defaultValue={now(getLocalTimeZone())}
+                      value={field.value ?? now(getLocalTimeZone())}
+                      onChange={field.onChange}
                       isInvalid={errors.startDate !== undefined}
                       errorMessage={errors.startDate?.message}
                     ></DatePicker>
@@ -154,7 +155,8 @@ const AddEventModal = (props: PropTypes) => {
                       hideTimeZone
                       showMonthAndYearPickers
                       variant="bordered"
-                      defaultValue={now(getLocalTimeZone())}
+                      value={field.value ?? now(getLocalTimeZone())}
+                      onChange={field.onChange}
                       isInvalid={errors.endDate !== undefined}
                       errorMessage={errors.endDate?.message}
                     ></DatePicker>
@@ -202,7 +204,7 @@ const AddEventModal = (props: PropTypes) => {
                     </Select>
                   )}
                 ></Controller>
-                                <Controller
+                <Controller
                   name="isOnline"
                   control={control}
                   render={({ field }) => (

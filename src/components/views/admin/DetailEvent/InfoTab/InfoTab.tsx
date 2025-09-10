@@ -16,7 +16,7 @@ import {
 import useInfoTab from "./useInfoTab";
 import { Controller } from "react-hook-form";
 import { useEffect } from "react";
-import { IEvent, IEventForm } from "@/types/Event";
+import { IEventForm } from "@/types/Event";
 import { ICategory } from "@/types/Category";
 import { toInputDate } from "@/utils/date";
 
@@ -47,7 +47,7 @@ const InfoTab = (props: PropTypes) => {
       setValueUpdateInfo("startDate", toInputDate(`${dataEvent?.startDate}`));
       setValueUpdateInfo("endDate", toInputDate(`${dataEvent?.endDate}`));
       setValueUpdateInfo("isFeatured", `${dataEvent?.isFeatured}`);
-      setValueUpdateInfo("isPublished", `${dataEvent?.isPublished}`);
+      setValueUpdateInfo("isPublish", `${dataEvent?.isPublish}`);
     }
   }, [dataEvent]);
 
@@ -168,18 +168,18 @@ const InfoTab = (props: PropTypes) => {
           </Skeleton>
           <Skeleton isLoaded={!!dataEvent} className="rounded-lg">
             <Controller
-              name="isPublished"
+              name="isPublish"
               control={controlUpdateInfo}
               render={({ field }) => (
                 <Select
                   {...field}
                   label="Status"
                   variant="bordered"
-                  isInvalid={errorsUpdateInfo.isPublished !== undefined}
-                  errorMessage={errorsUpdateInfo.isPublished?.message}
+                  isInvalid={errorsUpdateInfo.isPublish !== undefined}
+                  errorMessage={errorsUpdateInfo.isPublish?.message}
                   disallowEmptySelection
                   defaultSelectedKeys={[
-                    dataEvent?.isPublished ? "true" : "false",
+                    dataEvent?.isPublish ? "true" : "false",
                   ]}
                 >
                   <SelectItem key="true" value="true">

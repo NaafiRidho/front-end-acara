@@ -1,7 +1,5 @@
 import { ToasterContext } from "@/contexts/ToasterContext";
-import categoryServices from "@/services/category.service";
 import eventServices from "@/services/event.service";
-import { ICategory } from "@/types/Category";
 import { IEvent, IEventForm } from "@/types/Event";
 import { toDateStandard } from "@/utils/date";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -54,8 +52,6 @@ const useDetailEvent = () => {
   const handleUpdateInfo = (data: IEventForm) => {
     const payload = {
       ...data,
-      isFeatured: Boolean(data.isFeatured),
-      isPublished: Boolean(data.isPublished),
       startDate: data.startDate ? toDateStandard(data.startDate) : "",
       endDate: data.endDate ? toDateStandard(data.endDate) : "",
     };
@@ -66,6 +62,7 @@ const useDetailEvent = () => {
     const payload = {
       isOnline: Boolean(data.isOnline),
       location: {
+        address:`${data.address}`,
         region: `${data.region}`,
         coordinates: [Number(data.latitude), Number(data.longitude)],
       },

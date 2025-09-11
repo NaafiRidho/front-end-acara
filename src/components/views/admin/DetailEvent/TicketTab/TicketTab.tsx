@@ -8,10 +8,12 @@ import {
   CardHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { Fragment, Key, ReactNode, useCallback } from "react";
+import { Fragment, Key, ReactNode, useCallback, useState } from "react";
 import { COLUMN_LIST_TICKET } from "./TicketTab.constans";
 import useTicketTab from "./useTicketTab";
 import AddTicketModal from "./AddTicketModal/addTicketModal";
+import DeleteTicketModal from "./DeleteTicketModal/DeleteTicketModal";
+import { ITicket } from "@/types/Ticket";
 
 const TicketTab = () => {
   const { dataTicket, refetchTicket, isPendingTicket, isRefetchingTicket } =
@@ -19,6 +21,7 @@ const TicketTab = () => {
   const addTicketModal = useDisclosure();
   const deleteTicketModal = useDisclosure();
   const updateTicketModal = useDisclosure();
+  const [ SelectedDataTicket, setSelectedDataTicket ] = useState<ITicket|null>(null);
 
   const renderCell = useCallback(
     (ticket: Record<string, unknown>, columnKey: Key) => {
@@ -34,6 +37,7 @@ const TicketTab = () => {
                 updateTicketModal.onOpen();
               }}
               onPressButtonDelete={() => {
+                setSelectedDataTicket(ticket as ITicket);
                 deleteTicketModal.onOpen();
               }}
             />
@@ -48,29 +52,37 @@ const TicketTab = () => {
   return (
     <Fragment>
       <Card className="w-full p-4">
-      <CardHeader className="items-center justify-between">
-        <div className="flex flex-col items-center">
-          <h1 className="w-full text-xl font-bold">Event Ticket</h1>
-          <p className="w-full text-small text-default-400">
-            Manage Ticket of this event
-          </p>
-        </div>
-        <Button color="danger" onPress={addTicketModal.onOpen}>Add new Ticket</Button>
-      </CardHeader>
-      <CardBody className="pt-0">
-        <DataTable
-          emptyContent="Ticket is Empty"
-          renderCell={renderCell}
-          columns={COLUMN_LIST_TICKET}
-          data={dataTicket||[]}
-          totalPages={1}
-          isLoading={isPendingTicket||isRefetchingTicket}
-          showLimit={false}
-          showSearch={false}
-        />
-      </CardBody>
-    </Card>
-    <AddTicketModal {...addTicketModal} refecthTicket={refetchTicket}/>
+        <CardHeader className="items-center justify-between">
+          <div className="flex flex-col items-center">
+            <h1 className="w-full text-xl font-bold">Event Ticket</h1>
+            <p className="w-full text-small text-default-400">
+              Manage Ticket of this event
+            </p>
+          </div>
+          <Button color="danger" onPress={addTicketModal.onOpen}>
+            Add new Ticket
+          </Button>
+        </CardHeader>
+        <CardBody className="pt-0">
+          <DataTable
+            emptyContent="Ticket is Empty"
+            renderCell={renderCell}
+            columns={COLUMN_LIST_TICKET}
+            data={dataTicket || []}
+            totalPages={1}
+            isLoading={isPendingTicket || isRefetchingTicket}
+            showLimit={false}
+            showSearch={false}
+          />
+        </CardBody>
+      </Card>
+      <AddTicketModal {...addTicketModal} refecthTicket={refetchTicket} />
+      <DeleteTicketModal
+        SelectedDataTicket={SelectedDataTicket}
+        setSelectedDataTicket={setSelectedDataTicket}
+        refecthTicket={refetchTicket}
+        {...deleteTicketModal}
+      />
     </Fragment>
   );
 };

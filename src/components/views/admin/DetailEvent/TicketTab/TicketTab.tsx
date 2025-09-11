@@ -8,9 +8,10 @@ import {
   CardHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { Key, ReactNode, useCallback } from "react";
+import { Fragment, Key, ReactNode, useCallback } from "react";
 import { COLUMN_LIST_TICKET } from "./TicketTab.constans";
 import useTicketTab from "./useTicketTab";
+import AddTicketModal from "./AddTicketModal/addTicketModal";
 
 const TicketTab = () => {
   const { dataTicket, refetchTicket, isPendingTicket, isRefetchingTicket } =
@@ -45,7 +46,8 @@ const TicketTab = () => {
   );
 
   return (
-    <Card className="w-full p-4">
+    <Fragment>
+      <Card className="w-full p-4">
       <CardHeader className="items-center justify-between">
         <div className="flex flex-col items-center">
           <h1 className="w-full text-xl font-bold">Event Ticket</h1>
@@ -53,7 +55,7 @@ const TicketTab = () => {
             Manage Ticket of this event
           </p>
         </div>
-        <Button color="danger">Add new Ticket</Button>
+        <Button color="danger" onPress={addTicketModal.onOpen}>Add new Ticket</Button>
       </CardHeader>
       <CardBody className="pt-0">
         <DataTable
@@ -68,6 +70,8 @@ const TicketTab = () => {
         />
       </CardBody>
     </Card>
+    <AddTicketModal {...addTicketModal} refecthTicket={refetchTicket}/>
+    </Fragment>
   );
 };
 

@@ -37,7 +37,7 @@ const Banner = () => {
       switch (columnKey) {
         case "image":
           return (
-            <Image src={`${cellValue}`} alt="image" width={300} height={200} />
+            <Image src={`${cellValue}`} alt="image" width={300} height={200} className="rounded-lg" />
           );
         case "isShow":
           return (

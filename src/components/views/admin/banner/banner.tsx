@@ -7,6 +7,8 @@ import { COLUMN_LIST_BANNER } from "./Banner.constants";
 import useChangeUrl from "@/hooks/useChangeUrl";
 import DropdownAction from "@/components/commons/DropDownAction/DropdownAction";
 import useBanner from "./useBanner";
+import AddBannerModal from "./AddBannerModal/addBannerModal";
+import DeleteBannerModal from "./DeleteBannerModal/DeleteBannerModal";
 
 const Banner = () => {
   const { push, isReady, query } = useRouter();
@@ -37,7 +39,13 @@ const Banner = () => {
       switch (columnKey) {
         case "image":
           return (
-            <Image src={`${cellValue}`} alt="image" width={300} height={200} className="rounded-lg" />
+            <Image
+              src={`${cellValue}`}
+              alt="image"
+              width={300}
+              height={200}
+              className="rounded-lg"
+            />
           );
         case "isShow":
           return (
@@ -80,6 +88,14 @@ const Banner = () => {
           isLoading={isLoadingBanners || isRefetchingBanners}
         />
       )}
+      <AddBannerModal refecthBanner={refetchBanners} {...addBannerModal} />
+
+      <DeleteBannerModal
+        selectedId={selectedId}
+        setSelectedId={setSelectedId}
+        refecthBanner={refetchBanners}
+        {...deleteBannerModal}
+      />
     </section>
   );
 };

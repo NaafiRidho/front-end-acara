@@ -31,7 +31,7 @@ const LandingPageLayoutNavbar = () => {
   const { dataProfile } = useLandingPageLayoutNavbar();
   return (
     <Navbar maxWidth="full" isBordered isBlurred={false} shouldHideOnScroll>
-      <div className="flex items-center justify-center 2xl:container">
+      <div className="flex w-full items-center justify-between 2xl:container">
         <div className="flex items-center gap-8">
           <NavbarBrand as={Link} href="/">
             <Image
@@ -125,7 +125,7 @@ const LandingPageLayoutNavbar = () => {
                 className={cn(
                   "font-medium text-default-700 hover:text-danger",
                   {
-                    "font-bold, text-danger": router.pathname === item.href,
+                    "font-bold text-danger": router.pathname === item.href,
                   },
                 )}
               >

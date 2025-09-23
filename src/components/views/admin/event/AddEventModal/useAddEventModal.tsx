@@ -4,11 +4,9 @@ import useDebounce from "@/hooks/useDebounce";
 import useMediaHandling from "@/hooks/useMediaHandling";
 import categoryServices from "@/services/category.service";
 import eventServices from "@/services/event.service";
-import { ICategory } from "@/types/Category";
 import { IEvent, IEventForm } from "@/types/Event";
 import { toDateStandard } from "@/utils/date";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { getLocalTimeZone, now } from "@internationalized/date";
 import { DateValue } from "@nextui-org/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useContext, useState } from "react";
@@ -29,7 +27,7 @@ const schema = yup.object().shape({
   longitude: yup.string().required("Please Input longitude coordinate"),
   latitude: yup.string().required("Please Input latitude coordinate"),
   banner: yup.mixed<FileList | string>().required("Please Input Banner"),
-  address: yup.string().required('Please Input address'),
+  address: yup.string().required("Please Input address"),
 });
 
 const useAddEventModal = () => {
@@ -128,10 +126,10 @@ const useAddEventModal = () => {
   const handleAddEvent = (data: IEventForm) => {
     const payload = {
       ...data,
-      startDate: data.startDate ? toDateStandard(data.startDate) : "",
-      endDate: data.endDate ? toDateStandard(data.endDate) : "",
+      startDate: toDateStandard(data.startDate as DateValue),
+      endDate: toDateStandard(data.endDate as DateValue),
       location: {
-        address:`${data.address}`,
+        address: `${data.address}`,
         region: `${data.region}`,
         coordinates: [Number(data.latitude), Number(data.longitude)],
       },
@@ -158,6 +156,7 @@ const useAddEventModal = () => {
     handleSearchRegion,
     dataRegion,
     searchRegency,
+    setValue,
   };
 };
 

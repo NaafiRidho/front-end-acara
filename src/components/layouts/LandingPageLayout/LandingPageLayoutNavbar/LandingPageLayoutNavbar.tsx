@@ -7,6 +7,8 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Input,
+  Listbox,
+  ListboxItem,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -14,6 +16,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
+  Spinner,
 } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,11 +27,20 @@ import { CiSearch } from "react-icons/ci";
 import { signOut, useSession } from "next-auth/react";
 import useLandingPageLayoutNavbar from "./useLandingPageLayoutNavbar";
 import { Fragment } from "react";
+import { IEvent } from "@/types/Event";
 
 const LandingPageLayoutNavbar = () => {
   const router = useRouter();
   const session = useSession();
-  const { dataProfile } = useLandingPageLayoutNavbar();
+  const {
+    dataProfile,
+    dataEventsSearch,
+    isLoadingEventsSearch,
+    isRefetchingEventSearch,
+    handleSearch,
+    search,
+    setSearch,
+  } = useLandingPageLayoutNavbar();
   return (
     <Navbar maxWidth="full" isBordered isBlurred={false} shouldHideOnScroll>
       <div className="flex w-full items-center justify-between 2xl:container">
@@ -62,15 +74,47 @@ const LandingPageLayoutNavbar = () => {
         </div>
         <NavbarContent justify="end">
           <NavbarMenuToggle className="lg:hidden" />
-          <NavbarItem className="hidden lg:flex">
+          <NavbarItem className="hidden lg:flex relative">
             <Input
               isClearable
               className="w-[300px]"
               placeholder="Search Event"
               startContent={<CiSearch />}
-              onClear={() => {}}
-              onChange={() => {}}
+              onClear={() => setSearch("")}
+              onChange={handleSearch}
             />
+            {search !== "" && (
+              <Listbox
+                items={dataEventsSearch?.data || []}
+                className="absolute right-0 top-12 rounded-xl border bg-white"
+              >
+                {!isRefetchingEventSearch && !isLoadingEventsSearch ? (
+                  (item: IEvent) => (
+                    <ListboxItem
+                      key={item?._id}
+                      href={`/event/${item?.slug}`}
+                    >
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src={`${item?.banner}`}
+                        alt={`${item?.name}`}
+                        className="w-2/5 rounded-md"
+                        width={100}
+                        height={40}
+                      />
+                      <p className="w-3/5 text-wrap">
+                        {item?.name}
+                      </p>
+                    </div>
+                    </ListboxItem>
+                )
+                ) : (
+                  <ListboxItem key="loading">
+                    <Spinner color="danger" size="sm" />
+                  </ListboxItem>
+                )}
+              </Listbox>
+            )}
           </NavbarItem>
           {session.status === "authenticated" ? (
             <NavbarItem className="hidden lg:block">
@@ -95,7 +139,11 @@ const LandingPageLayoutNavbar = () => {
                   <DropdownItem key="profile" href="/member/profile">
                     Profile
                   </DropdownItem>
-                  <DropdownItem key="signout" onPress={() => signOut()} className="text-danger">
+                  <DropdownItem
+                    key="signout"
+                    onPress={() => signOut()}
+                    className="text-danger"
+                  >
                     LogOut
                   </DropdownItem>
                 </DropdownMenu>

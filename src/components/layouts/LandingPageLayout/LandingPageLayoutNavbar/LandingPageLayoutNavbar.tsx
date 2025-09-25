@@ -95,7 +95,7 @@ const LandingPageLayoutNavbar = () => {
                   <DropdownItem key="profile" href="/member/profile">
                     Profile
                   </DropdownItem>
-                  <DropdownItem key="signout" onPress={() => signOut()}>
+                  <DropdownItem key="signout" onPress={() => signOut()} className="text-danger">
                     LogOut
                   </DropdownItem>
                 </DropdownMenu>

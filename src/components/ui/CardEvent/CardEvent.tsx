@@ -23,7 +23,7 @@ const CardEvent = (props: PropTypes) => {
       key={key}
       className={cn(className, "cursor-pointer")}
     >
-      {!isLoading ? (
+      {!isLoading && event?.banner ? (
         <Fragment>
           <CardBody>
             <Image

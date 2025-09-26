@@ -8,8 +8,9 @@ const eventServices = {
     deleteEvent: (id: string) => instance.delete(`${endpoint.EVENT}/${id}`),
     searchLocationByRegency: (name: string) => instance.get(`${endpoint.REGION}-search?name=${name}`),
     getEventById: (id: string) => instance.get(`${endpoint.EVENT}/${id}`),
-    updateEvent: (id: string, payload:IEvent) => instance.put(`${endpoint.EVENT}/${id}`,payload),
-    getRegencyById:(id:string) => instance.get(`${endpoint.REGION}/${id}/regency`),
+    getEventBySlug: (slug: string) => instance.get(`${endpoint.EVENT}/${slug}/slug`),
+    updateEvent: (id: string, payload: IEvent) => instance.put(`${endpoint.EVENT}/${id}`, payload),
+    getRegencyById: (id: string) => instance.get(`${endpoint.REGION}/${id}/regency`),
 }
 
 export default eventServices;

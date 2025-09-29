@@ -32,7 +32,7 @@ const DetailEvent = () => {
       <Script
         src={environment.MIDTRANS_SNAP_URL}
         data-client-key={environment.MIDTRANS_CLIENT_KEY}
-        strategy="lazyOnload"
+        strategy="afterInteractive"
       />
       {/* Breadcrumb */}
       <Skeleton isLoaded={!!dataEvent?.name} className="h-auto w-full rounded-lg">

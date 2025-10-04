@@ -7,6 +7,8 @@ const orderServices = {
     updateOrderStatus: (id: string, status: string) => instance.put(`${endpoint.ORDER}/${id}/${status}`),
     getOrderMember: (params: string) => instance.get(`${endpoint.ORDER}-history?${params}`),
     getOrderById: (id: string) => instance.get(`${endpoint.ORDER}/${id}`),
+    getOrders: (params: string) => instance.get(`${endpoint.ORDER}?${params}`),
+    deleteOrder: (id: string) => instance.delete(`${endpoint.ORDER}/${id}`)
 }
 
 export default orderServices;

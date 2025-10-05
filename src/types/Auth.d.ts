@@ -9,7 +9,7 @@ interface IRegister {
     confirmPassword: string
 }
 
-interface ILogin{
+interface ILogin {
     identifier: string;
     password: string;
 }
@@ -31,4 +31,14 @@ interface JWTExtended extends JWT {
     user?: UserExtended;
 }
 
-export type { IRegister, IActivation, JWTExtended, SessionExtended, UserExtended, ILogin }
+interface IProfile {
+    _id?: string;
+    email?: string;
+    fullname?: string;
+    isActive?: boolean;
+    profilePicture?: string | FileList;
+    role?: string;
+    username?: string;
+}
+
+export type { IRegister, IActivation, JWTExtended, SessionExtended, UserExtended, ILogin, IProfile }

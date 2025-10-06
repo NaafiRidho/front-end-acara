@@ -116,7 +116,7 @@ const LandingPageLayoutNavbar = () => {
               <Dropdown>
                 <DropdownTrigger>
                   <Avatar
-                    src={dataProfile?.ProfilePicture}
+                    src={dataProfile?.profilePicture}
                     className="cursor-pointer"
                     showFallback
                   />

@@ -41,9 +41,9 @@ const PictureTab = (props: PropTypes) => {
     }
   }, [isSuccessUpdate]);
   return (
-    <Card className="w-full p-4 lg:w-1/2">
+    <Card className="w-full p-4 lg:w-1/3">
       <CardHeader className="flex-col items-center">
-        <h1 className="w-full text-xl font-bold">Picture Event</h1>
+        <h1 className="w-full text-xl font-bold">Profile Picture</h1>
         <p className="w-full text-small text-default-400">
           Manage Picture for your profile
         </p>
@@ -59,7 +59,7 @@ const PictureTab = (props: PropTypes) => {
             </p>
             <Skeleton
               isLoaded={!!currentPicture}
-              className="rounded-lg w-1/2 aspect-square"
+              className="rounded-lg w-full aspect-square"
             >
               <Avatar
                 src={currentPicture}

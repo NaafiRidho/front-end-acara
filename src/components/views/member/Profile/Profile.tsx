@@ -1,7 +1,8 @@
 import { Tab, Tabs } from "@nextui-org/react";
 import PictureTab from "./PictureTab/PictureTab";
-import LocationTab from "./InfoTab/InfoTab";
+import InfoTab from "./InfoTab/InfoTab";
 import useProfile from "./useProfile";
+import SecurityTab from "./SecurityTab/SecurityTab";
 
 const Profile = () => {
   const {
@@ -20,14 +21,17 @@ const Profile = () => {
           isSuccessUpdate={isSuccessMutateUpdateProfile}
         />
       </Tab>
-      {/* <Tab key="info" title="Info">
+      <Tab key="info" title="Info">
         <InfoTab
-          dataEvent={dataEvent}
-          onUpdate={handleUpdateInfo}
-          isPendingUpdate={isPendingMutateUpdateEvent}
-          isSuccessUpdate={isSuccessMutateUpdateEvent}
+          dataProfile={dataProfile}
+          onUpdate={handleUpdateProfile}
+          isPendingUpdate={isPendingMutateUpdateProfile}
+          isSuccessUpdate={isSuccessMutateUpdateProfile}
         />
-      </Tab> */}
+      </Tab>
+      <Tab key="security" title="Security">
+        <SecurityTab />
+      </Tab>
     </Tabs>
   );
 };

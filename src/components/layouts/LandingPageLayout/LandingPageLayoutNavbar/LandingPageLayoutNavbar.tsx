@@ -74,7 +74,7 @@ const LandingPageLayoutNavbar = () => {
         </div>
         <NavbarContent justify="end">
           <NavbarMenuToggle className="lg:hidden" />
-          <NavbarItem className="hidden lg:flex relative">
+          <NavbarItem className="relative hidden lg:flex">
             <Input
               isClearable
               className="w-[300px]"
@@ -90,24 +90,19 @@ const LandingPageLayoutNavbar = () => {
               >
                 {!isRefetchingEventSearch && !isLoadingEventsSearch ? (
                   (item: IEvent) => (
-                    <ListboxItem
-                      key={item?._id}
-                      href={`/event/${item?.slug}`}
-                    >
-                    <div className="flex items-center gap-2">
-                      <Image
-                        src={`${item?.banner}`}
-                        alt={`${item?.name}`}
-                        className="w-2/5 rounded-md"
-                        width={100}
-                        height={40}
-                      />
-                      <p className="w-3/5 text-wrap">
-                        {item?.name}
-                      </p>
-                    </div>
+                    <ListboxItem key={item?._id} href={`/event/${item?.slug}`}>
+                      <div className="flex items-center gap-2">
+                        <Image
+                          src={`${item?.banner}`}
+                          alt={`${item?.name}`}
+                          className="w-2/5 rounded-md"
+                          width={100}
+                          height={40}
+                        />
+                        <p className="w-3/5 text-wrap">{item?.name}</p>
+                      </div>
                     </ListboxItem>
-                )
+                  )
                 ) : (
                   <ListboxItem key="loading">
                     <Spinner color="danger" size="sm" />
@@ -129,7 +124,7 @@ const LandingPageLayoutNavbar = () => {
                 <DropdownMenu>
                   <DropdownItem
                     key="admin"
-                    href="/admin/dashboard"
+                    href="/admin/event"
                     className={cn({
                       hidden: dataProfile?.role !== "admin",
                     })}
@@ -190,7 +185,7 @@ const LandingPageLayoutNavbar = () => {
                     },
                   )}
                 >
-                  <Link href="/admin/dashboard">Admin</Link>
+                  <Link href="/admin/event">Admin</Link>
                 </NavbarMenuItem>
                 <NavbarMenuItem className="font-medium text-default-700 hover:text-danger">
                   <Link href="/member/profile">Profile</Link>
